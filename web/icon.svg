@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Deadline Tracker</title>
+  <defs>
+    <linearGradient id="tile" x1="24" y1="20" x2="232" y2="240" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2b344a"/>
+      <stop offset="1" stop-color="#0a0e18"/>
+    </linearGradient>
+    <linearGradient id="highlight" x1="64" y1="51" x2="195" y2="196" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9bd8ff"/>
+      <stop offset="1" stop-color="#438df6"/>
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="236" height="236" rx="56" fill="url(#tile)"/>
+  <rect x="11" y="11" width="234" height="234" rx="55" fill="none" stroke="#ffffff" stroke-opacity=".13" stroke-width="2"/>
+  <rect x="54" y="67" width="148" height="137" rx="24" fill="#f5f9ff"/>
+  <path d="M54 91c0-13.3 10.7-24 24-24h100c13.3 0 24 10.7 24 24v20H54V91Z" fill="url(#highlight)"/>
+  <path d="M94 57v27M162 57v27" stroke="#dbeeff" stroke-width="13" stroke-linecap="round"/>
+  <path d="m94 155 24 22 46-49" fill="none" stroke="#2587e9" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

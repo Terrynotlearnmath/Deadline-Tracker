@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deadline Tracker</title>
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <h1 class="app-title">Deadline Tracker</h1>
+                <span class="task-count" id="taskCount">0 active</span>
+            </div>
+            <div class="header-right">
+                <button class="add-btn" id="addBtn" type="button" title="Add new project" aria-label="Add new project">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M9 3v12M3 9h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-state-icon">🎯</div>
+                <h2 class="empty-state-title">No deadlines yet</h2>
+                <p class="empty-state-subtitle">Click the + button to add your first project</p>
+            </div>
+
+            <!-- Tasks Grid -->
+            <div class="tasks-grid" id="tasksGrid"></div>
+
+            <!-- Finished Section -->
+            <div class="finished-section" id="finishedSection" style="display: none;">
+                <div class="finished-header-row">
+                    <button class="finished-header" id="finishedHeader" type="button" aria-expanded="false" aria-controls="finishedList">
+                        <svg class="finished-chevron" id="chevronIcon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                            <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="finished-title">Completed</span>
+                        <span class="finished-count" id="finishedCount">0</span>
+                    </button>
+                    <button class="clear-completed-btn" id="clearCompletedBtn" type="button">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                            <path d="M2.5 4h9M5 4V2.5h4V4M5.5 6.5v4M8.5 6.5v4M3.5 4l.5 8h6l.5-8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Clear
+                    </button>
+                </div>
+                <div class="finished-list" id="finishedList">
+                    <div class="finished-grid" id="finishedGrid"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+        <div class="modal-content" id="modalContent">
+            <h2 class="modal-title" id="modalTitle">New Project</h2>
+            <div class="form-group">
+                <label class="form-label" for="projectTitle">Project Name</label>
+                <input type="text" class="form-input" id="projectTitle" placeholder="Enter project name..." autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="projectDeadline">Deadline</label>
+                <input type="datetime-local" class="form-input" id="projectDeadline">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="modalCancel">Cancel</button>
+                <button class="btn-primary" id="modalSave">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Completed Tasks Action Sheet -->
+    <div class="modal-overlay action-sheet-overlay" id="clearOverlay" aria-hidden="true">
+        <section class="action-sheet" role="dialog" aria-modal="true" aria-labelledby="clearTitle">
+            <div class="sheet-handle" aria-hidden="true"></div>
+            <h2 class="modal-title" id="clearTitle">Clear completed tasks</h2>
+            <p class="modal-subtitle">Completed tasks are kept forever unless you clear them.</p>
+            <div class="clear-options">
+                <button class="clear-option" type="button" data-clear-range="week">
+                    <span>Completed 7+ days ago</span>
+                    <span class="option-detail" data-clear-count="week">0 tasks</span>
+                </button>
+                <button class="clear-option" type="button" data-clear-range="month">
+                    <span>Completed 1+ month ago</span>
+                    <span class="option-detail" data-clear-count="month">0 tasks</span>
+                </button>
+                <button class="clear-option clear-option-danger" type="button" data-clear-range="all">
+                    <span>All completed tasks</span>
+                    <span class="option-detail" data-clear-count="all">0 tasks</span>
+                </button>
+            </div>
+            <button class="sheet-cancel" id="clearCancel" type="button">Cancel</button>
+        </section>
+    </div>
+
+    <!-- Native Window Close Choice -->
+    <div class="modal-overlay close-overlay" id="closeOverlay" aria-hidden="true">
+        <section class="modal-content close-dialog" role="dialog" aria-modal="true" aria-labelledby="closeTitle">
+            <div class="close-dialog-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="3.5" y="4.5" width="17" height="15" rx="3" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M7 8.5h10M7 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h2 class="modal-title" id="closeTitle">Close Deadline Tracker?</h2>
+            <p class="modal-subtitle">Keep it running in the notification area, or end the program completely.</p>
+            <div class="close-actions">
+                <button class="btn-secondary close-choice" id="hideAppBtn" type="button">
+                    <span>Keep Running</span>
+                    <small>Hide in the notification area</small>
+                </button>
+                <button class="btn-danger close-choice" id="quitAppBtn" type="button">
+                    <span>End Program</span>
+                    <small>Quit the application</small>
+                </button>
+            </div>
+            <p class="close-error" id="closeError" role="alert"></p>
+        </section>
+    </div>
+
+    <div class="toast" id="undoToast" role="status" aria-live="polite" aria-hidden="true">
+        <span id="toastMessage"></span>
+        <button id="undoClearBtn" type="button">Undo</button>
+    </div>
+
+    <script src="fireworks.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
